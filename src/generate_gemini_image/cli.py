@@ -63,9 +63,10 @@ def init():
             "# Permissions set to 600 (User Read/Write Only)\n\n"
             "PROJECT_ID=\n"
             "LOCATION=us-central1\n"
-            "MODEL_NAME=gemini-2.5-flash-image\n"
+            "MODEL_NAME=gemini-3-pro-image-preview\n"
             f"OUTPUT_DIR={Path.home() / 'Pictures' / 'Gemini_Generated'}\n"
             "ASPECT_RATIO=1:1\n"
+            "IMAGE_SIZE=1K\n"
             "SAFETY_FILTER_LEVEL=block_some\n"
             "PERSON_GENERATION=allow_all\n"
             "ADD_WATERMARK=true\n"
@@ -103,6 +104,7 @@ def generate(
     location: str = typer.Option(None, "--location", help="GCP Location."),
     model_name: str = typer.Option(None, "--model-name", help="Vertex AI Model."),
     aspect_ratio: str = typer.Option(None, help="Aspect ratio (e.g., 1:1, 16:9)."),
+    image_size: str = typer.Option(None, help="Image resolution (1K, 2K, 4K)."),
     negative_prompt: str = typer.Option(None, help="Negative prompt."),
     seed: int = typer.Option(None, help="Random seed."),
     verbose: bool = typer.Option(
@@ -110,7 +112,7 @@ def generate(
     ),
 ):
     """
-    Generate images using Gemini/Imagen models with Nano Banana enhancements.
+    Generate images using Gemini 3 Pro (Nano Banana Pro) with enhancements.
     """
     if verbose:
         logger.setLevel(logging.DEBUG)
@@ -121,6 +123,7 @@ def generate(
     resolved_model_name = model_name or settings.model_name
     resolved_output_dir = output_dir or settings.output_dir
     resolved_aspect_ratio = aspect_ratio or settings.aspect_ratio
+    resolved_image_size = image_size or settings.image_size
 
     # "Nano Banana" Prompt Augmentation
     full_prompt = prompt
@@ -148,6 +151,7 @@ def generate(
             prompt=full_prompt,
             count=count,
             aspect_ratio=resolved_aspect_ratio,
+            image_size=resolved_image_size,
             negative_prompt=negative_prompt,
             person_generation=settings.person_generation,
             safety_filter_level=settings.safety_filter_level,
