@@ -90,7 +90,9 @@ class ImageGenerator:
         
         # Explicitly resolve the threshold here
         valid_threshold = self._resolve_safety_threshold(safety_filter_level)
-        logger.debug(f"Resolved Safety Threshold: {safety_filter_level} -> {valid_threshold}")
+        logger.debug(
+            f"Resolved Safety Threshold: {safety_filter_level} -> {valid_threshold}"
+        )
 
         # Gemini 3 Pro generates one image per request typically
         for i in range(count):
