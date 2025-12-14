@@ -79,7 +79,7 @@ def init():
         
     except Exception as e:
         console.print(f"[red]Failed to initialize configuration: {e}[/red]")
-        raise typer.Exit(code=1)
+        raise typer.Exit(code=1) from e
 
 
 @app.command()
