@@ -59,7 +59,7 @@ class ImageGenerator:
         image_size: str = "1K",
         negative_prompt: Optional[str] = None,
         person_generation: str = "allow_all",
-        safety_filter_level: str = "block_some",
+        safety_filter_level: str = "BLOCK_ONLY_HIGH",
         add_watermark: bool = True,
         seed: Optional[int] = None,
         output_dir: Path = Path("."),

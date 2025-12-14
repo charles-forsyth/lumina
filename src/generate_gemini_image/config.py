@@ -19,7 +19,7 @@ class Settings(BaseSettings):
     # Image Generation Defaults
     aspect_ratio: str = Field("1:1", description="Default aspect ratio")
     image_size: str = Field("1K", description="Resolution (1K, 2K, 4K)")
-    safety_filter_level: str = Field("block_some", description="Safety filter level")
+    safety_filter_level: str = Field("BLOCK_ONLY_HIGH", description="Safety filter level")
     person_generation: str = Field("allow_all", description="Person generation setting")
     add_watermark: bool = Field(True, description="Add invisible watermark")
 

@@ -66,7 +66,7 @@ def init():
             f"OUTPUT_DIR={Path.home() / 'Pictures' / 'Gemini_Generated'}\n"
             "ASPECT_RATIO=1:1\n"
             "IMAGE_SIZE=1K\n"
-            "SAFETY_FILTER_LEVEL=block_some\n"
+            "SAFETY_FILTER_LEVEL=BLOCK_ONLY_HIGH\n"
             "PERSON_GENERATION=allow_all\n"
             "ADD_WATERMARK=true\n"
         )
