@@ -51,6 +51,20 @@ class ImageGenerator:
                 raise
         return self._client
 
+    def _resolve_safety_threshold(self, level: str) -> str:
+        """
+        Maps user-friendly or legacy safety levels to valid Vertex AI/Gemini enums.
+        """
+        level = level.upper()
+        mapping = {
+            "BLOCK_SOME": "BLOCK_ONLY_HIGH",  # Legacy/Default fix
+            "BLOCK_MOST": "BLOCK_LOW_AND_ABOVE",
+            "BLOCK_FEW": "BLOCK_ONLY_HIGH",
+            "BLOCK_NONE": "BLOCK_NONE",
+        }
+        # Return mapped value or original if not in map (assuming user knows valid enum)
+        return mapping.get(level, level)
+
     def generate(
         self,
         prompt: str,
@@ -74,6 +88,8 @@ class ImageGenerator:
         ensure_directory(output_dir)
 
         saved_files = []
+        
+        valid_threshold = self._resolve_safety_threshold(safety_filter_level)
 
         # Gemini 3 Pro generates one image per request typically
         for i in range(count):
@@ -88,7 +104,19 @@ class ImageGenerator:
                     "safety_settings": [
                         {
                             "category": "HARM_CATEGORY_HARASSMENT",
-                            "threshold": safety_filter_level.upper(),
+                            "threshold": valid_threshold,
+                        },
+                        {
+                            "category": "HARM_CATEGORY_HATE_SPEECH",
+                            "threshold": valid_threshold,
+                        },
+                        {
+                            "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+                            "threshold": valid_threshold,
+                        },
+                         {
+                            "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+                            "threshold": valid_threshold,
                         }
                     ]
                     if safety_filter_level
