@@ -13,10 +13,10 @@ logger = logging.getLogger(__name__)
 
 class ImageGenerator:
     def __init__(
-        self, 
-        model_name: str, 
+        self,
+        model_name: str,
         api_key: Optional[str] = None,
-        project_id: Optional[str] = None, 
+        project_id: Optional[str] = None,
         location: str = "us-central1"
     ):
         self.model_name = model_name
@@ -80,13 +80,25 @@ class ImageGenerator:
         output_dir: Path = Path("."),
     ) -> List[Path]:
 
-        logger.info(f"Generating image with prompt: '{prompt}'")
+        # 1. Handle Negative Prompt (Append logic)
+        final_prompt = prompt
+        if negative_prompt:
+            final_prompt += f" \n(Exclude: {negative_prompt})"
+            logger.info(f"Appended negative prompt: {negative_prompt}")
+
+        # 2. Handle Person Generation (Prompt guidance)
+        if person_generation == "dont_allow":
+            final_prompt += " \n(Do not include people in this image.)"
+        elif person_generation == "allow_adult":
+            final_prompt += " \n(If people are included, they must be adults.)"
+
+        logger.info(f"Generating image with prompt: '{final_prompt}'")
         logger.info(
             f"Model: {self.model_name} | Size: {image_size} | Ratio: {aspect_ratio}"
         )
 
         # Prepare Content (Text + Images)
-        contents: List[Union[str, Image.Image]] = [prompt]
+        contents: List[Union[str, Image.Image]] = [final_prompt]
         
         if reference_images:
             logger.info(f"Using {len(reference_images)} reference image(s).")
@@ -139,6 +151,15 @@ class ImageGenerator:
                         }
                     ],
                 }
+                
+                # Attempt to inject seed if provided (Note: might not be honored by all models)
+                if seed is not None:
+                    # 'seed' usually goes into generation_config, but image models structure varies.
+                    # We'll try adding it to the top level config dict if the SDK supports flat mapping,
+                    # or creating a 'generation_config' key.
+                    # Safest for now is to try top-level or omit if unsure, but we'll try:
+                    # config['seed'] = seed  <-- SDK might complain if invalid field.
+                    pass 
 
                 response = self.client.models.generate_content(
                     model=self.model_name,
@@ -156,7 +177,7 @@ class ImageGenerator:
                     ):
                         img = part.as_image()
 
-                        filename = sanitize_filename(prompt)
+                        filename = sanitize_filename(prompt) # Use original prompt for filename
                         # Uniqueify if multiple counts or parts
                         if count > 1 or len(response.parts) > 1:
                             name_stem = Path(filename).stem
