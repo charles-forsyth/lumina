@@ -114,7 +114,7 @@ def main(
         "--style",
         help=(
             "Artistic styles to apply. Examples: 'Cyberpunk', 'Watercolor', "
-            "'Oil Painting', 'Photorealistic', 'Anime', 'Sketch', 'Vintage', '3D Render'."
+            "'Oil Painting', 'Photorealistic', 'Anime', 'Sketch', 'Vintage'."
         ),
     ),
     variations: Optional[List[str]] = typer.Option(
@@ -235,7 +235,7 @@ def main(
     if not resolved_api_key and not resolved_project_id:
          console.print(
             "[bold red]Authentication missing.[/bold red] Provide either "
-            "--api-key (or API_KEY in env)"
+            "--api-key (or API_KEY in env)\n"
             "OR --project-id (or PROJECT_ID/ADC)."
         )
          raise typer.Exit(code=1)
