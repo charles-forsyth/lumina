@@ -152,11 +152,8 @@ class ImageGenerator:
                     ],
                 }
                 
-                # Attempt to inject seed if provided 
+                # Seed is not yet injected into config
                 if seed is not None:
-                    # 'seed' usually goes into generation_config
-                    # We'll try adding it to the top level config dict if the SDK supports it
-                    # Safest for now is to try top-level or omit if unsure
                     pass 
 
                 response = self.client.models.generate_content(
