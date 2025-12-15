@@ -11,7 +11,11 @@ from rich.logging import RichHandler
 from .config import settings
 from .core import ImageGenerator
 
-app = typer.Typer(help="Modernized Gemini Image Generation CLI")
+# Enable -h for help
+app = typer.Typer(
+    help="Modernized Gemini Image Generation CLI",
+    context_settings={"help_option_names": ["-h", "--help"]},
+)
 console = Console()
 
 # Configure logging
@@ -92,10 +96,10 @@ def main(
         1, "--count", "-n", help="Number of images (Nano Banana strict)."
     ),
     styles: Optional[List[str]] = typer.Option(
-        None, "--style", help="Artistic styles (e.g., watercolor)."
+        None, "--style", help="Artistic styles (e.g., watercolor, photorealistic)."
     ),
     variations: Optional[List[str]] = typer.Option(
-        None, "--variation", help="Variation types (e.g., lighting)."
+        None, "--variation", help="Variation types (e.g., lighting, mood)."
     ),
     output_dir: Path = typer.Option(
         None, "--output-dir", "-o", help="Directory to save output."
@@ -114,7 +118,20 @@ def main(
 ):
     """
     Generate images using Gemini 3 Pro (Nano Banana Pro).
-    Run with --prompt to generate, or pipe text via stdin.
+    
+    Examples:
+    
+    # 1. Basic Generation
+    $ generate-gemini-image -p "A cyberpunk cat"
+
+    # 2. Piping from stdin
+    $ echo "A beautiful mountain sunset" | generate-gemini-image
+
+    # 3. Multiple Images with Styles
+    $ generate-gemini-image -p "A forest" -n 4 --style "watercolor" --style "vintage"
+
+    # 4. High Resolution & Wide Aspect Ratio
+    $ generate-gemini-image -p "Space battle" --aspect-ratio "16:9" --image-size "4K"
     """
     # If a subcommand (like 'init') is invoked, just return and let it run.
     if ctx.invoked_subcommand is not None:
