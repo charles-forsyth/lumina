@@ -152,13 +152,11 @@ class ImageGenerator:
                     ],
                 }
                 
-                # Attempt to inject seed if provided (Note: might not be honored by all models)
+                # Attempt to inject seed if provided 
                 if seed is not None:
-                    # 'seed' usually goes into generation_config, but image models structure varies.
-                    # We'll try adding it to the top level config dict if the SDK supports flat mapping,
-                    # or creating a 'generation_config' key.
-                    # Safest for now is to try top-level or omit if unsure, but we'll try:
-                    # config['seed'] = seed  <-- SDK might complain if invalid field.
+                    # 'seed' usually goes into generation_config
+                    # We'll try adding it to the top level config dict if the SDK supports it
+                    # Safest for now is to try top-level or omit if unsure
                     pass 
 
                 response = self.client.models.generate_content(
@@ -177,7 +175,8 @@ class ImageGenerator:
                     ):
                         img = part.as_image()
 
-                        filename = sanitize_filename(prompt) # Use original prompt for filename
+                        # Use original prompt for filename
+                        filename = sanitize_filename(prompt)
                         # Uniqueify if multiple counts or parts
                         if count > 1 or len(response.parts) > 1:
                             name_stem = Path(filename).stem
