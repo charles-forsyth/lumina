@@ -201,6 +201,12 @@ class ImageGenerator:
 
             except Exception as e:
                 logger.error(f"Image generation failed for iteration {i + 1}: {e}")
+                if "404" in str(e):
+                    logger.error(
+                        f"TIP: Ensure model '{self.model_name}' is enabled in project "
+                        f"'{self.project_id}' and available in region 'us-central1'. "
+                        "You may need to request access."
+                    )
                 # We continue to try other iterations if one fails, or could raise
                 if i == count - 1 and not saved_files:
                     raise
