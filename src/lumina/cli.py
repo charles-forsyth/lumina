@@ -189,6 +189,11 @@ EXAMPLES:
     return parser
 
 
+class AFCFilter(logging.Filter):
+    def filter(self, record):
+        return "AFC is enabled" not in record.getMessage()
+
+
 def main():
     parser = get_parser()
     args = parser.parse_args()
@@ -202,6 +207,10 @@ def main():
         handlers=[RichHandler(rich_tracebacks=True, show_path=False)],
         force=True,
     )
+
+    # Apply the nuclear filter to all handlers
+    for handler in logging.getLogger().handlers:
+        handler.addFilter(AFCFilter())
 
     # Suppress noisy libraries
     logging.getLogger("httpx").setLevel(logging.WARNING)
