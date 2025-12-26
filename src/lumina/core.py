@@ -36,10 +36,10 @@ class ImageGenerator:
         if not self._client:
             try:
                 if self.api_key:
-                    logger.info("Initializing Client with API Key (Google AI Studio)")
+                    logger.debug("Initializing Client with API Key (Google AI Studio)")
                     self._client = genai.Client(api_key=self.api_key, vertexai=False)
                 else:
-                    logger.info("Initializing Client with Vertex AI (GCP)")
+                    logger.debug("Initializing Client with Vertex AI (GCP)")
                     if not self.project_id:
                         raise ValueError("Project ID is required for Vertex AI.")
                     self._client = genai.Client(
@@ -92,8 +92,8 @@ class ImageGenerator:
         elif person_generation == "allow_adult":
             final_prompt += " \n(If people are included, they must be adults.)"
 
-        logger.info(f"Generating image with prompt: '{final_prompt}'")
-        logger.info(
+        logger.debug(f"Generating image with prompt: '{final_prompt}'")
+        logger.debug(
             f"Model: {self.model_name} | Size: {image_size} | Ratio: {aspect_ratio}"
         )
 
@@ -197,7 +197,7 @@ class ImageGenerator:
                         output_path = output_dir / current_filename
                         img.save(output_path)
                         saved_files.append(output_path)
-                        logger.info(f"Saved: {output_path}")
+                        logger.debug(f"Saved: {output_path}")
 
             except Exception as e:
                 logger.error(f"Image generation failed for iteration {i + 1}: {e}")

@@ -203,6 +203,12 @@ def main():
         force=True,
     )
 
+    # Suppress noisy libraries
+    logging.getLogger("httpx").setLevel(logging.WARNING)
+    logging.getLogger("httpcore").setLevel(logging.WARNING)
+    logging.getLogger("google").setLevel(logging.WARNING)
+    logging.getLogger("urllib3").setLevel(logging.WARNING)
+
     if args.command == "init":
         run_init()
         return
@@ -214,7 +220,7 @@ def main():
         if not sys.stdin.isatty():
             prompt = sys.stdin.read().strip()
             if prompt:
-                logger.info("Reading prompt from stdin...")
+                logger.debug("Reading prompt from stdin...")
 
     # If still no prompt, show error
     if not prompt:
@@ -255,12 +261,14 @@ def main():
         full_prompt += f", with variations in {var_text}"
 
     if resolved_api_key:
-        logger.info("Using Authentication: API Key")
+        logger.debug("Using Authentication: API Key")
     else:
-        logger.info(f"Using Authentication: Vertex AI (Project: {resolved_project_id})")
+        logger.debug(
+            f"Using Authentication: Vertex AI (Project: {resolved_project_id})"
+        )
 
-    logger.info(f"Model: {resolved_model_name}")
-    logger.info(f"Full Prompt: {full_prompt}")
+    logger.debug(f"Model: {resolved_model_name}")
+    logger.debug(f"Full Prompt: {full_prompt}")
 
     generator = ImageGenerator(
         model_name=resolved_model_name,

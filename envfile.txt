@@ -1,0 +1,36 @@
+# Secure Configuration for Lumina
+# Permissions set to 600 (User Read/Write Only)
+
+# --- AUTHENTICATION (Choose Only One) ---
+
+# OPTION A: Google AI Studio (Recommended for Preview Models)
+# Get one here: https://aistudio.google.com/app/apikey
+API_KEY=your_actual_api_key_starts_with_AIza...
+
+# OPTION B: Vertex AI / GCP (Currently giving you 404s)
+# Comment this out if using API_KEY
+# PROJECT_ID=ucr-research-computing
+
+# --- GOOGLE CLOUD SETTINGS ---
+LOCATION=us-central1
+
+# --- MODEL SETTINGS ---
+# "Nano Banana Pro"
+MODEL_NAME=gemini-3-pro-image-preview
+
+# --- OUTPUT SETTINGS ---
+# Where images are saved
+OUTPUT_DIR=/home/chuck/Pictures/Lumina_Generated
+
+# --- GENERATION DEFAULTS ---
+ASPECT_RATIO=16:9
+IMAGE_SIZE=4K
+
+# Safety: BLOCK_NONE, BLOCK_ONLY_HIGH, BLOCK_MEDIUM_AND_ABOVE
+SAFETY_FILTER_LEVEL=BLOCK_NONE
+
+# Person Generation: allow_all, allow_adult, dont_allow
+PERSON_GENERATION=allow_all
+
+# Watermark: true or false
+ADD_WATERMARK=true
