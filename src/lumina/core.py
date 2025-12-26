@@ -181,16 +181,17 @@ class ImageGenerator:
                         # Uniqueify if multiple counts or parts
                         if count > 1 or len(response.parts) > 1:
                             name_stem = Path(current_filename).stem
-                            suffix = Path(current_filename).suffix
-                            # Ensure suffix exists if user provided filename without it
-                            if not suffix and filename:
-                                suffix = ".png"  # Default to png
+                            # Ensure we don't double up on extensions
+                            # if sanitize_filename added one
+                            suffix = Path(current_filename).suffix or ".png"
 
-                            # Add unique index
                             if filename:
+                                # User provided specific filename, just append index
+                                name_stem = Path(filename).stem
+                                suffix = Path(filename).suffix or ".png"
                                 current_filename = f"{name_stem}_{i}{suffix}"
                             else:
-                                # Legacy auto-naming format
+                                # Auto-naming: clean up stem and ensure valid suffix
                                 s_img = sanitize_filename("img")[-6:]
                                 current_filename = f"{name_stem}_{i}_{s_img}{suffix}"
 
