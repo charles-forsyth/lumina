@@ -16,6 +16,11 @@ console = Console()
 logger = logging.getLogger("lumina")
 
 
+class AFCFilter(logging.Filter):
+    def filter(self, record):
+        return "AFC is enabled" not in record.getMessage()
+
+
 def get_project_id(project_id_arg: Optional[str]) -> Optional[str]:
     if project_id_arg:
         return project_id_arg
@@ -181,17 +186,18 @@ EXAMPLES:
         help="Items to exclude from the image (e.g., 'blur, distortion').",
     )
     parser.add_argument(
+        "--optimize",
+        "--opt",
+        action="store_true",
+        help="Optimize prompt using Gemini before generation (Great for raw data!).",
+    )
+    parser.add_argument(
         "--seed",
         type=int,
         help="Random seed for reproducible results.",
     )
 
     return parser
-
-
-class AFCFilter(logging.Filter):
-    def filter(self, record):
-        return "AFC is enabled" not in record.getMessage()
 
 
 def main():
@@ -263,6 +269,19 @@ def main():
         )
         sys.exit(1)
 
+    generator = ImageGenerator(
+        model_name=resolved_model_name,
+        api_key=resolved_api_key,
+        project_id=resolved_project_id,
+        location=resolved_location,
+    )
+
+    # Prompt Optimization
+    if args.optimize:
+        console.print("[cyan]Optimizing prompt...[/cyan]")
+        prompt = generator.optimize_prompt(prompt)
+        console.print(f"[dim]Optimized: {prompt}[/dim]")
+
     # "Nano Banana" Prompt Augmentation
     full_prompt = prompt
     if args.style:
@@ -281,13 +300,6 @@ def main():
 
     logger.debug(f"Model: {resolved_model_name}")
     logger.debug(f"Full Prompt: {full_prompt}")
-
-    generator = ImageGenerator(
-        model_name=resolved_model_name,
-        api_key=resolved_api_key,
-        project_id=resolved_project_id,
-        location=resolved_location,
-    )
 
     try:
         files = generator.generate(

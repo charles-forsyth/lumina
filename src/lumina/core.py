@@ -52,6 +52,48 @@ class ImageGenerator:
                 raise
         return self._client
 
+    def optimize_prompt(self, raw_prompt: str) -> str:
+        """
+        Uses a text model to rewrite the input into a high-quality image prompt.
+        """
+        logger.debug("Optimizing prompt with Gemini...")
+
+        system_instruction = (
+            "You are an expert image prompt engineer for the Gemini 3 Pro model. "
+            "Your task is to rewrite the user's input into a single, highly detailed, "
+            "and visually descriptive prompt optimized for image generation. "
+            "Focus on: Subject, Medium (photorealistic, 3d render, etc.), "
+            "Style, Lighting, Color Palette, and Composition. "
+            "Handle raw data (like tables) by visualizing the scene described "
+            "by the data. "
+            "Output ONLY the raw prompt text. Do not add markdown or explanations."
+        )
+
+        try:
+            # Use a capable text model for optimization
+            optimization_model = "gemini-1.5-pro"
+
+            response = self.client.models.generate_content(
+                model=optimization_model,
+                contents=raw_prompt,
+                config={
+                    "system_instruction": system_instruction,
+                    "temperature": 0.7,
+                },
+            )
+
+            if response.text:
+                optimized = response.text.strip()
+                logger.debug(f"Optimized Prompt: {optimized}")
+                return optimized
+            else:
+                logger.warning("Optimization returned no text. Using raw prompt.")
+                return raw_prompt
+
+        except Exception as e:
+            logger.warning(f"Prompt optimization failed: {e}. Using raw prompt.")
+            return raw_prompt
+
     def _resolve_safety_threshold(self, level: str) -> str:
         """
         Maps user-friendly or legacy safety levels to valid Vertex AI/Gemini enums.

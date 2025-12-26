@@ -1,6 +1,6 @@
 [project]
 name = "lumina"
-version = "0.2.5"
+version = "0.3.0"
 description = "Lumina: Modernized Gemini Image Generation CLI"
 readme = "README.md"
 requires-python = ">=3.12"
