@@ -10,6 +10,9 @@ from .utils import ensure_directory, sanitize_filename
 
 logger = logging.getLogger(__name__)
 
+# Text model used to rewrite prompts (--optimize). Current GA Flash.
+OPTIMIZATION_MODEL = "gemini-3.8-flash"
+
 
 class ImageGenerator:
     def __init__(
@@ -59,7 +62,7 @@ class ImageGenerator:
         logger.debug("Optimizing prompt with Gemini...")
 
         system_instruction = (
-            "You are an expert image prompt engineer for the Gemini 3 Pro model. "
+            "You are an expert image prompt engineer for Gemini image models. "
             "Your task is to rewrite the user's input into a single, highly detailed, "
             "and visually descriptive prompt optimized for image generation. "
             "Focus on: Subject, Medium (photorealistic, 3d render, etc.), "
@@ -71,7 +74,7 @@ class ImageGenerator:
 
         try:
             # Use the requested model for optimization
-            optimization_model = "gemini-3-pro-preview"
+            optimization_model = OPTIMIZATION_MODEL
 
             response = self.client.models.generate_content(
                 model=optimization_model,

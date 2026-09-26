@@ -4,7 +4,7 @@
 
 ## Features
 
-*   **Gemini 3 Pro**: Uses the latest `gemini-3-pro-image-preview` model via `google-genai` SDK.
+*   **Nano Banana Pro**: Uses the GA `gemini-3-pro-image` model via the `google-genai` SDK (Nano Banana 2, `gemini-3.1-flash-image`, is a cheaper option via `--model-name`).
 *   **Image Editing**: Modify existing images or create composites using reference images (`--image`).
 *   **Dual Auth**: Support for both **API Key** (Google AI Studio) and **Vertex AI** (GCP).
 *   **Flexible CLI**: Support for named arguments (`--prompt`), piping from stdin (`|`), and rich output.
@@ -116,7 +116,7 @@ lumina -p "Logo" --filename "company_logo.png"
 | :--- | :--- | :--- |
 | `API_KEY` | Google AI Studio Key | None |
 | `PROJECT_ID` | GCP Project ID | None |
-| `MODEL_NAME` | Model ID | `gemini-3-pro-image-preview` |
+| `MODEL_NAME` | Model ID | `gemini-3-pro-image` |
 | `OUTPUT_DIR` | Output folder | `~/Pictures/Lumina_Generated` |
 | `ASPECT_RATIO` | Default shape | `1:1` |
 | `IMAGE_SIZE` | Resolution (`1K`, `2K`, `4K`) | `1K` |

@@ -12,7 +12,7 @@ class Settings(BaseSettings):
 
     location: str = Field("us-central1", description="Google Cloud Location")
     model_name: str = Field(
-        "gemini-3-pro-image-preview", description="Gemini Model Name"
+        "gemini-3-pro-image", description="Gemini image model (Nano Banana Pro GA)"
     )
     output_dir: Path = Field(
         Path.home() / "Pictures" / "Lumina_Generated",
