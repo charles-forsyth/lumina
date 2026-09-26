@@ -61,7 +61,7 @@ def run_init():
             "API_KEY=\n"
             "PROJECT_ID=\n\n"
             "LOCATION=us-central1\n"
-            "MODEL_NAME=gemini-3-pro-image-preview\n"
+            "MODEL_NAME=gemini-3-pro-image\n"
             f"OUTPUT_DIR={Path.home() / 'Pictures' / 'Lumina_Generated'}\n"
             "ASPECT_RATIO=1:1\n"
             "IMAGE_SIZE=1K\n"
@@ -172,7 +172,7 @@ EXAMPLES:
     parser.add_argument("--location", help="GCP Location (default: us-central1).")
     parser.add_argument(
         "--model-name",
-        help="Vertex AI Model (default: gemini-3-pro-image-preview).",
+        help="Image model (default: gemini-3-pro-image, Nano Banana Pro).",
     )
     parser.add_argument(
         "--aspect-ratio",
