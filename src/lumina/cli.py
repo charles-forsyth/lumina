@@ -21,11 +21,15 @@ class AFCFilter(logging.Filter):
         return "AFC is enabled" not in record.getMessage()
 
 
-def get_project_id(project_id_arg: Optional[str]) -> Optional[str]:
+def get_project_id(
+    project_id_arg: Optional[str], has_api_key: bool = False
+) -> Optional[str]:
     if project_id_arg:
         return project_id_arg
     if settings.project_id:
         return settings.project_id
+    if has_api_key:
+        return None
 
     try:
         _, project = google.auth.default()
@@ -253,7 +257,9 @@ def main():
 
     # Resolve Configuration
     resolved_api_key = args.api_key or settings.api_key
-    resolved_project_id = get_project_id(args.project_id)
+    resolved_project_id = get_project_id(
+        args.project_id, has_api_key=bool(resolved_api_key)
+    )
     resolved_location = args.location or settings.location
     resolved_model_name = args.model_name or settings.model_name
     resolved_output_dir = args.output_dir or settings.output_dir
