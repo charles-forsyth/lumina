@@ -75,3 +75,12 @@ def test_generate_multiple_images_loop(mock_genai_client, tmp_path):
 
     assert mock_client_instance.models.generate_content.call_count == 2
     assert len(files) == 2
+
+
+def test_get_project_id_skips_gce_auth_when_api_key_set(monkeypatch):
+    from lumina import cli
+
+    monkeypatch.setattr(cli.settings, "project_id", None)
+    with patch("lumina.cli.google.auth.default") as mock_auth_default:
+        assert cli.get_project_id(None, has_api_key=True) is None
+        mock_auth_default.assert_not_called()
