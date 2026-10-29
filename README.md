@@ -1,5 +1,7 @@
 # Lumina: Modernized Gemini Image Generation CLI
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23755685.svg)](https://doi.org/10.5281/zenodo.23755685)
+
 **Lumina** (`v0.4.1`) is a CLI tool for generating and editing images using Google's **Gemini 3 Pro Image** (`gemini-3-pro-image`, Nano Banana Pro) and **Gemini 3.1 Flash Image** (`gemini-3.1-flash-image`, Nano Banana 2) models.
 
 See [SPEC.md](SPEC.md) for the full system specification, architecture, configuration schema, and requirement traceability.
